@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QSOFT — Каталог решений</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 20px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0096ff;
+            margin-bottom: 5px;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        select, input[type="text"] {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #e0e0e0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            min-width: 150px;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #0096ff;
+        }
+
+        .view-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .view-tab {
+            padding: 8px 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #888;
+            transition: all 0.2s;
+        }
+
+        .view-tab:hover {
+            border-color: #0096ff;
+            color: #e0e0e0;
+        }
+
+        .view-tab.active {
+            background: #0096ff;
+            border-color: #0096ff;
+            color: #fff;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border: 1px solid #222;
+            border-radius: 8px;
+            background: #111;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            background: #1a1a1a;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            border-bottom: 2px solid #333;
+        }
+
+        th.section-header {
+            background: #0096ff;
+            color: #fff;
+            text-align: center;
+            font-size: 10px;
+            padding: 6px 15px;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #1a1a1a;
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        tr:hover td {
+            background: #1a1a1a;
+        }
+
+        .id-cell {
+            font-family: monospace;
+            color: #0096ff;
+            font-weight: 600;
+        }
+
+        .name-cell {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            margin: 2px;
+        }
+
+        .tag-category {
+            background: rgba(0, 150, 255, 0.15);
+            color: #0096ff;
+        }
+
+        .tag-industry {
+            background: rgba(80, 200, 120, 0.15);
+            color: #50c878;
+        }
+
+        .tag-role {
+            background: rgba(255, 165, 0, 0.15);
+            color: #ffa500;
+        }
+
+        .tag-size {
+            background: rgba(147, 112, 219, 0.15);
+            color: #9370db;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-production {
+            background: rgba(80, 200, 120, 0.2);
+            color: #50c878;
+        }
+
+        .status-pilot {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-development {
+            background: rgba(0, 150, 255, 0.2);
+            color: #0096ff;
+        }
+
+        .status-concept {
+            background: rgba(150, 150, 150, 0.2);
+            color: #999;
+        }
+
+        .status-yes {
+            background: rgba(80, 200, 120, 0.2);
+            color: #50c878;
+        }
+
+        .status-no {
+            background: rgba(255, 99, 71, 0.2);
+            color: #ff6347;
+        }
+
+        .status-ready {
+            background: rgba(80, 200, 120, 0.2);
+            color: #50c878;
+        }
+
+        .status-needs-prep {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-update {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        .price-cell {
+            font-family: monospace;
+            color: #50c878;
+        }
+
+        .link-cell a {
+            color: #0096ff;
+            text-decoration: none;
+        }
+
+        .link-cell a:hover {
+            text-decoration: underline;
+        }
+
+        .result-cell {
+            color: #50c878;
+        }
+
+        .case-cell {
+            font-size: 12px;
+        }
+
+        .case-client {
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .case-result {
+            color: #888;
+            font-size: 11px;
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: normal;
+            width: 250px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .expand-cell {
+            max-width: 300px;
+            white-space: normal;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: #111;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0096ff;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 15px 20px;
+            background: #111;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+
+        .legend-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">QSOFT</div>
+        <h1 class="title">Каталог решений</h1>
+        <p class="subtitle">Сводная таблица всех решений для клиентских дней • Обновлено: 15 марта 2024</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-value">10</div>
+            <div class="stat-label">Решений</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Категорий</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">8</div>
+            <div class="stat-label">С AI</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">23</div>
+            <div class="stat-label">Кейса</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">14</div>
+            <div class="stat-label">Спикеров</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="filter-group">
+            <span class="filter-label">Категория:</span>
+            <select id="filterCategory">
+                <option value="">Все</option>
+                <option value="portal">Корпоративные порталы</option>
+                <option value="ecom">E-commerce</option>
+                <option value="mobile">Мобильные приложения</option>
+                <option value="ai">AI и автоматизация</option>
+                <option value="security">Безопасность</option>
+                <option value="analytics">Аналитика</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <span class="filter-label">Отрасль:</span>
+            <select id="filterIndustry">
+                <option value="">Все</option>
+                <option value="retail">Ритейл</option>
+                <option value="finance">Финансы</option>
+                <option value="pharma">Фарма</option>
+                <option value="manufacture">Производство</option>
+                <option value="telecom">Телеком</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <span class="filter-label">AI-готовность:</span>
+            <select id="filterAI">
+                <option value="">Все</option>
+                <option value="production">В продакшене</option>
+                <option value="pilot">Пилот</option>
+                <option value="development">В разработке</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <span class="filter-label">Поиск:</span>
+            <input type="text" id="search" placeholder="Название, описание...">
+        </div>
+    </div>
+
+    <div class="view-tabs">
+        <div class="view-tab active" data-view="all">Все данные</div>
+        <div class="view-tab" data-view="overview">Обзор</div>
+        <div class="view-tab" data-view="commercial">Коммерция</div>
+        <div class="view-tab" data-view="cases">Кейсы</div>
+        <div class="view-tab" data-view="ai">AI-фокус</div>
+        <div class="view-tab" data-view="readiness">Готовность</div>
+    </div>
+
+    <div class="table-container">
+        <table id="solutionsTable">
+            <thead>
+                <tr>
+                    <th colspan="6" class="section-header">ИДЕНТИФИКАЦИЯ</th>
+                    <th colspan="4" class="section-header">СУТЬ И ЦЕННОСТЬ</th>
+                    <th colspan="4" class="section-header">ЦЕЛЕВАЯ АУДИТОРИЯ</th>
+                    <th colspan="3" class="section-header">ФУНКЦИОНАЛЬНОСТЬ</th>
+                    <th colspan="3" class="section-header">AI-КОМПОНЕНТ</th>
+                    <th colspan="4" class="section-header">КЕЙС 1</th>
+                    <th colspan="4" class="section-header">КЕЙС 2</th>
+                    <th colspan="3" class="section-header">КОНКУРЕНЦИЯ</th>
+                    <th colspan="5" class="section-header">КОММЕРЦИЯ</th>
+                    <th colspan="3" class="section-header">ПАРТНЁРЫ</th>
+                    <th colspan="5" class="section-header">ГОТОВНОСТЬ</th>
+                </tr>
+                <tr>
+                    <!-- ИДЕНТИФИКАЦИЯ -->
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Юнит</th>
+                    <th>Категория</th>
+                    <th>Владелец</th>
+                    <th>Обновлено</th>
+                    <!-- СУТЬ И ЦЕННОСТЬ -->
+                    <th>Описание</th>
+                    <th>Проблема</th>
+                    <th>Результат</th>
+                    <th>Цифры</th>
+                    <!-- ЦЕЛЕВАЯ АУДИТОРИЯ -->
+                    <th>Роли</th>
+                    <th>Отрасли</th>
+                    <th>Размер</th>
+                    <th>Триггеры</th>
+                    <!-- ФУНКЦИОНАЛЬНОСТЬ -->
+                    <th>Функции</th>
+                    <th>Стек</th>
+                    <th>Интеграции</th>
+                    <!-- AI -->
+                    <th>AI-сценарии</th>
+                    <th>AI-эффект</th>
+                    <th>AI-статус</th>
+                    <!-- КЕЙС 1 -->
+                    <th>Клиент</th>
+                    <th>Отрасль</th>
+                    <th>Результат</th>
+                    <th>Публичный</th>
+                    <!-- КЕЙС 2 -->
+                    <th>Клиент</th>
+                    <th>Отрасль</th>
+                    <th>Результат</th>
+                    <th>Публичный</th>
+                    <!-- КОНКУРЕНЦИЯ -->
+                    <th>Преимущества</th>
+                    <th>Конкуренты</th>
+                    <th>Отличия</th>
+                    <!-- КОММЕРЦИЯ -->
+                    <th>Модель</th>
+                    <th>Мин. цена</th>
+                    <th>Типовая цена</th>
+                    <th>Сроки</th>
+                    <th>Факторы</th>
+                    <!-- ПАРТНЁРЫ -->
+                    <th>Вендоры</th>
+                    <th>Статус</th>
+                    <th>На клиент. день</th>
+                    <!-- ГОТОВНОСТЬ -->
+                    <th>Презентация</th>
+                    <th>Спикер 1</th>
+                    <th>Готовность</th>
+                    <th>Спикер 2</th>
+                    <th>Демо</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Решение 1: Корпоративный портал -->
+                <tr>
+                    <td class="id-cell">SOL-001</td>
+                    <td class="name-cell">Корпоративный портал</td>
+                    <td>Порталы и интранет</td>
+                    <td><span class="tag tag-category">Корпоративные порталы</span></td>
+                    <td>Иванов А.С.</td>
+                    <td>15.03.2024</td>
+                    <td class="expand-cell">Единая платформа для внутренних коммуникаций, управления знаниями и сервисов самообслуживания</td>
+                    <td class="expand-cell">Разрозненные каналы коммуникации, потеря информации, низкая вовлечённость</td>
+                    <td class="result-cell">Единое цифровое пространство для всех сотрудников</td>
+                    <td class="result-cell">-40% время на поиск, +25% вовлечённость</td>
+                    <td><span class="tag tag-role">HR</span><span class="tag tag-role">CIO</span><span class="tag tag-role">Внутриком</span></td>
+                    <td><span class="tag tag-industry">Ритейл</span><span class="tag tag-industry">Финансы</span><span class="tag tag-industry">Производство</span></td>
+                    <td><span class="tag tag-size">Enterprise</span></td>
+                    <td>Рост компании, удалёнка, смена платформы</td>
+                    <td>Новости, база знаний, оргструктура, сервисы, поиск</td>
+                    <td>Битрикс24, React, PostgreSQL</td>
+                    <td>1С, SAP, AD, Outlook, Teams</td>
+                    <td>Умный поиск, чат-бот, рекомендации контента</td>
+                    <td>-60% нагрузка на поддержку</td>
+                    <td><span class="status status-production">В продакшене</span></td>
+                    <td class="case-cell"><span class="case-client">Крупный ритейлер</span></td>
+                    <td>Ритейл</td>
+                    <td class="case-result">15 000 юзеров, запуск 4 мес.</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td class="case-cell"><span class="case-client">Промсвязьбанк</span></td>
+                    <td>Финансы</td>
+                    <td class="case-result">12 интеграций, 8 000 юзеров</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td>50+ внедрений, своя методология</td>
+                    <td>КРОК, Ланит, Софтлайн</td>
+                    <td>Глубокая UX-экспертиза, быстрый запуск</td>
+                    <td>Проект под ключ</td>
+                    <td class="price-cell">от 3 млн ₽</td>
+                    <td class="price-cell">8–15 млн ₽</td>
+                    <td>4–6 мес.</td>
+                    <td>Интеграции, кастом, контент</td>
+                    <td>1С-Битрикс</td>
+                    <td>Золотой партнёр</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td><span class="status status-ready">Актуальная</span></td>
+                    <td>Иванов А.С.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>Петров К.М.</td>
+                    <td>Демо-стенд, видео</td>
+                </tr>
+
+                <!-- Решение 2: E-commerce B2B -->
+                <tr>
+                    <td class="id-cell">SOL-002</td>
+                    <td class="name-cell">E-commerce B2B платформа</td>
+                    <td>E-commerce</td>
+                    <td><span class="tag tag-category">E-commerce</span></td>
+                    <td>Смирнова Е.В.</td>
+                    <td>12.03.2024</td>
+                    <td class="expand-cell">Платформа для оптовых продаж с личным кабинетом дилера, интеграцией с ERP и автоматизацией заказов</td>
+                    <td class="expand-cell">Ручная обработка заказов, ошибки, долгий цикл сделки</td>
+                    <td class="result-cell">Автоматизация 80% заказов, снижение ошибок</td>
+                    <td class="result-cell">+35% скорость обработки, -70% ошибок</td>
+                    <td><span class="tag tag-role">Коммерческий директор</span><span class="tag tag-role">IT</span></td>
+                    <td><span class="tag tag-industry">Производство</span><span class="tag tag-industry">Дистрибуция</span><span class="tag tag-industry">FMCG</span></td>
+                    <td><span class="tag tag-size">Mid-market</span><span class="tag tag-size">Enterprise</span></td>
+                    <td>Рост дилерской сети, устаревший сайт</td>
+                    <td>Каталог, корзина, ЛК дилера, история, документы</td>
+                    <td>1С-Битрикс, Vue.js, Elasticsearch</td>
+                    <td>1С, SAP, МойСклад, логистика</td>
+                    <td>Рекомендации товаров, прогноз спроса</td>
+                    <td>+15% средний чек</td>
+                    <td><span class="status status-production">В продакшене</span></td>
+                    <td class="case-cell"><span class="case-client">Производитель электроники</span></td>
+                    <td>Производство</td>
+                    <td class="case-result">500 дилеров, +40% онлайн-заказы</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td class="case-cell"><span class="case-client">СПЛАТ</span></td>
+                    <td>FMCG</td>
+                    <td class="case-result">Интеграция с 3 ERP</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td>Опыт сложных интеграций с ERP</td>
+                    <td>Agora, Compo, Axelot</td>
+                    <td>Фокус на B2B-специфике</td>
+                    <td>Проект под ключ</td>
+                    <td class="price-cell">от 5 млн ₽</td>
+                    <td class="price-cell">12–25 млн ₽</td>
+                    <td>5–8 мес.</td>
+                    <td>Кол-во SKU, интеграции, ЛК</td>
+                    <td>1С-Битрикс</td>
+                    <td>Золотой партнёр</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td><span class="status status-ready">Актуальная</span></td>
+                    <td>Смирнова Е.В.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>Козлов Д.А.</td>
+                    <td>Демо-стенд</td>
+                </tr>
+
+                <!-- Решение 3: Мобильное приложение -->
+                <tr>
+                    <td class="id-cell">SOL-003</td>
+                    <td class="name-cell">Мобильное приложение для сотрудников</td>
+                    <td>Мобильная разработка</td>
+                    <td><span class="tag tag-category">Мобильные приложения</span></td>
+                    <td>Николаев М.П.</td>
+                    <td>10.03.2024</td>
+                    <td class="expand-cell">Мобильный доступ к корпоративным сервисам, новостям, заявкам и коммуникациям</td>
+                    <td class="expand-cell">Сотрудники «в полях» без доступа к корп. системам</td>
+                    <td class="result-cell">Доступ к сервисам 24/7 с любого устройства</td>
+                    <td class="result-cell">+60% охват сотрудников, -50% время на заявки</td>
+                    <td><span class="tag tag-role">HR</span><span class="tag tag-role">IT</span><span class="tag tag-role">Операционный директор</span></td>
+                    <td><span class="tag tag-industry">Ритейл</span><span class="tag tag-industry">Логистика</span><span class="tag tag-industry">Производство</span></td>
+                    <td><span class="tag tag-size">Enterprise</span></td>
+                    <td>Много полевых сотрудников, низкое вовлечение</td>
+                    <td>Новости, заявки, расчётный лист, чат, push</td>
+                    <td>React Native, Swift, Kotlin</td>
+                    <td>Корп. портал, 1С ЗУП, AD</td>
+                    <td>Персонализация контента, умные уведомления</td>
+                    <td>+40% открываемость</td>
+                    <td><span class="status status-production">В продакшене</span></td>
+                    <td class="case-cell"><span class="case-client">Магнит</span></td>
+                    <td>Ритейл</td>
+                    <td class="case-result">300 000 установок</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td class="case-cell"><span class="case-client">Логистическая компания</span></td>
+                    <td>Логистика</td>
+                    <td class="case-result">5 000 водителей подключено</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td>Опыт 300К+ пользователей</td>
+                    <td>Workmate, TalkDesk</td>
+                    <td>Интеграция с порталом из коробки</td>
+                    <td>Проект под ключ</td>
+                    <td class="price-cell">от 4 млн ₽</td>
+                    <td class="price-cell">8–15 млн ₽</td>
+                    <td>4–6 мес.</td>
+                    <td>Платформы, функции, интеграции</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><span class="status status-no">Нет</span></td>
+                    <td><span class="status status-ready">Актуальная</span></td>
+                    <td>Николаев М.П.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>Фёдорова А.И.</td>
+                    <td>Видео, скриншоты</td>
+                </tr>
+
+                <!-- Решение 4: AI-чатбот -->
+                <tr>
+                    <td class="id-cell">SOL-004</td>
+                    <td class="name-cell">AI-ассистент для сотрудников</td>
+                    <td>AI и автоматизация</td>
+                    <td><span class="tag tag-category">AI и автоматизация</span></td>
+                    <td>Волков Р.Д.</td>
+                    <td>14.03.2024</td>
+                    <td class="expand-cell">Интеллектуальный чат-бот на базе LLM для ответов на вопросы сотрудников и автоматизации рутины</td>
+                    <td class="expand-cell">HR и поддержка тратят 70% времени на типовые вопросы</td>
+                    <td class="result-cell">Автоматизация 80% типовых обращений</td>
+                    <td class="result-cell">-70% нагрузка на HR, ответ за 5 сек</td>
+                    <td><span class="tag tag-role">HR</span><span class="tag tag-role">IT</span><span class="tag tag-role">Операционный директор</span></td>
+                    <td><span class="tag tag-industry">Все отрасли</span></td>
+                    <td><span class="tag tag-size">Mid-market</span><span class="tag tag-size">Enterprise</span></td>
+                    <td>Рост обращений, нехватка HR, хайп AI</td>
+                    <td>NLP, база знаний, эскалация, аналитика</td>
+                    <td>Python, LangChain, GPT-4, RAG</td>
+                    <td>Корп. портал, 1С ЗУП, ITSM</td>
+                    <td>Понимание контекста, обучение на данных</td>
+                    <td>80% вопросов без человека</td>
+                    <td><span class="status status-production">В продакшене</span></td>
+                    <td class="case-cell"><span class="case-client">Банк ТОП-10</span></td>
+                    <td>Финансы</td>
+                    <td class="case-result">50 000 диалогов/мес</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td class="case-cell"><span class="case-client">Телеком-оператор</span></td>
+                    <td>Телеком</td>
+                    <td class="case-result">-65% нагрузка на HR</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td>Опыт LLM в enterprise, безопасность</td>
+                    <td>Яндекс, OpenAI-совместимые</td>
+                    <td>Работаем с российскими LLM</td>
+                    <td>Пилот + масштабирование</td>
+                    <td class="price-cell">от 2 млн ₽</td>
+                    <td class="price-cell">5–10 млн ₽</td>
+                    <td>2–4 мес.</td>
+                    <td>Объём базы знаний, интеграции</td>
+                    <td>YandexGPT, GigaChat</td>
+                    <td>Партнёр</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td><span class="status status-ready">Актуальная</span></td>
+                    <td>Волков Р.Д.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>—</td>
+                    <td>Демо-бот</td>
+                </tr>
+
+                <!-- Решение 5: PIM-система -->
+                <tr>
+                    <td class="id-cell">SOL-005</td>
+                    <td class="name-cell">PIM-система</td>
+                    <td>E-commerce</td>
+                    <td><span class="tag tag-category">E-commerce</span></td>
+                    <td>Смирнова Е.В.</td>
+                    <td>08.03.2024</td>
+                    <td class="expand-cell">Централизованное управление товарной информацией для всех каналов продаж</td>
+                    <td class="expand-cell">Товарные данные в разных системах, ошибки, долгий вывод</td>
+                    <td class="result-cell">Единый источник правды о товарах</td>
+                    <td class="result-cell">-60% время на вывод товара, -80% ошибок</td>
+                    <td><span class="tag tag-role">E-commerce директор</span><span class="tag tag-role">Категорийный менеджер</span></td>
+                    <td><span class="tag tag-industry">Ритейл</span><span class="tag tag-industry">FMCG</span><span class="tag tag-industry">Производство</span></td>
+                    <td><span class="tag tag-size">Mid-market</span><span class="tag tag-size">Enterprise</span></td>
+                    <td>Омниканальность, рост SKU, маркетплейсы</td>
+                    <td>Карточки товаров, атрибуты, медиа, экспорт</td>
+                    <td>Akeneo, Pimcore, custom</td>
+                    <td>1С, сайт, маркетплейсы, ERP</td>
+                    <td>Автозаполнение атрибутов, генерация описаний</td>
+                    <td>-50% время контент-менеджера</td>
+                    <td><span class="status status-pilot">Пилот</span></td>
+                    <td class="case-cell"><span class="case-client">DIY-ритейлер</span></td>
+                    <td>Ритейл</td>
+                    <td class="case-result">50 000 SKU, 5 каналов</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td class="case-cell"><span class="case-client">Фарм. дистрибутор</span></td>
+                    <td>Фарма</td>
+                    <td class="case-result">Интеграция с 3 маркетплейсами</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td>Опыт сложных каталогов</td>
+                    <td>Akeneo, Salsify</td>
+                    <td>Внедряем и кастомизируем</td>
+                    <td>Проект под ключ</td>
+                    <td class="price-cell">от 4 млн ₽</td>
+                    <td class="price-cell">10–20 млн ₽</td>
+                    <td>4–8 мес.</td>
+                    <td>Кол-во SKU, атрибуты, каналы</td>
+                    <td>Akeneo</td>
+                    <td>Silver Partner</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td><span class="status status-update">Нужно обновить</span></td>
+                    <td>Смирнова Е.В.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>—</td>
+                    <td>Скриншоты</td>
+                </tr>
+
+                <!-- Решение 6: CDP -->
+                <tr>
+                    <td class="id-cell">SOL-006</td>
+                    <td class="name-cell">CDP — платформа клиентских данных</td>
+                    <td>Аналитика и данные</td>
+                    <td><span class="tag tag-category">Аналитика</span></td>
+                    <td>Кузнецов В.А.</td>
+                    <td>11.03.2024</td>
+                    <td class="expand-cell">Единый профиль клиента из всех источников для персонализации и аналитики</td>
+                    <td class="expand-cell">Данные о клиентах разрознены, нет единого профиля</td>
+                    <td class="result-cell">360° view клиента, персонализация коммуникаций</td>
+                    <td class="result-cell">+25% конверсия, +30% retention</td>
+                    <td><span class="tag tag-role">CMO</span><span class="tag tag-role">CRM-директор</span><span class="tag tag-role">IT</span></td>
+                    <td><span class="tag tag-industry">Ритейл</span><span class="tag tag-industry">Финансы</span><span class="tag tag-industry">Телеком</span></td>
+                    <td><span class="tag tag-size">Enterprise</span></td>
+                    <td>Персонализация, отток клиентов, ROMI</td>
+                    <td>Сбор данных, профили, сегментация, активации</td>
+                    <td>Mindbox, Exponea, custom</td>
+                    <td>CRM, сайт, приложение, email, реклама</td>
+                    <td>Предиктивная сегментация, churn prediction</td>
+                    <td>-20% отток</td>
+                    <td><span class="status status-production">В продакшене</span></td>
+                    <td class="case-cell"><span class="case-client">Fashion-ритейлер</span></td>
+                    <td>Ритейл</td>
+                    <td class="case-result">2 млн профилей, +18% LTV</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td class="case-cell"><span class="case-client">Банк</span></td>
+                    <td>Финансы</td>
+                    <td class="case-result">Интеграция 8 источников</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td>Опыт интеграции разнородных данных</td>
+                    <td>Mindbox, Segment</td>
+                    <td>Комплексный подход к данным</td>
+                    <td>T&M</td>
+                    <td class="price-cell">от 5 млн ₽</td>
+                    <td class="price-cell">15–30 млн ₽</td>
+                    <td>6–10 мес.</td>
+                    <td>Источники, объём данных, ML</td>
+                    <td>Mindbox</td>
+                    <td>Интегратор</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td><span class="status status-ready">Актуальная</span></td>
+                    <td>Кузнецов В.А.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>Морозова Л.К.</td>
+                    <td>Скриншоты, схемы</td>
+                </tr>
+
+                <!-- Решение 7: ITSM -->
+                <tr>
+                    <td class="id-cell">SOL-007</td>
+                    <td class="name-cell">ITSM / Service Desk</td>
+                    <td>Автоматизация процессов</td>
+                    <td><span class="tag tag-category">ITSM</span></td>
+                    <td>Соколов И.Е.</td>
+                    <td>09.03.2024</td>
+                    <td class="expand-cell">Система управления ИТ-услугами и заявками по ITIL</td>
+                    <td class="expand-cell">Хаос в заявках, нет SLA, непрозрачность</td>
+                    <td class="result-cell">Прозрачный процесс, соблюдение SLA</td>
+                    <td class="result-cell">+40% соблюдение SLA, -30% время решения</td>
+                    <td><span class="tag tag-role">CIO</span><span class="tag tag-role">IT-директор</span></td>
+                    <td><span class="tag tag-industry">Все отрасли</span></td>
+                    <td><span class="tag tag-size">Mid-market</span><span class="tag tag-size">Enterprise</span></td>
+                    <td>Рост IT, аудит, импортозамещение</td>
+                    <td>Заявки, SLA, CMDB, база знаний, отчёты</td>
+                    <td>SimpleOne, Итилиум, custom</td>
+                    <td>AD, мониторинг, почта, портал</td>
+                    <td>Автоклассификация заявок, чат-бот</td>
+                    <td>-40% время маршрутизации</td>
+                    <td><span class="status status-production">В продакшене</span></td>
+                    <td class="case-cell"><span class="case-client">Госкорпорация</span></td>
+                    <td>Госсектор</td>
+                    <td class="case-result">10 000 заявок/мес</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td class="case-cell"><span class="case-client">Производственный холдинг</span></td>
+                    <td>Производство</td>
+                    <td class="case-result">15 филиалов, единый SD</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td>Опыт ITIL-внедрений</td>
+                    <td>ServiceNow (ушёл), BMC</td>
+                    <td>Работаем с российскими решениями</td>
+                    <td>Проект под ключ</td>
+                    <td class="price-cell">от 3 млн ₽</td>
+                    <td class="price-cell">8–15 млн ₽</td>
+                    <td>4–6 мес.</td>
+                    <td>Процессы, интеграции, CMDB</td>
+                    <td>SimpleOne</td>
+                    <td>Партнёр</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td><span class="status status-ready">Актуальная</span></td>
+                    <td>Соколов И.Е.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>—</td>
+                    <td>Демо-стенд</td>
+                </tr>
+
+                <!-- Решение 8: AML -->
+                <tr>
+                    <td class="id-cell">SOL-008</td>
+                    <td class="name-cell">AML-система</td>
+                    <td>Безопасность и комплаенс</td>
+                    <td><span class="tag tag-category">Безопасность</span></td>
+                    <td>Белов Д.С.</td>
+                    <td>13.03.2024</td>
+                    <td class="expand-cell">Система противодействия отмыванию денег и финансированию терроризма</td>
+                    <td class="expand-cell">Регуляторные требования, ручной мониторинг, штрафы</td>
+                    <td class="result-cell">Соответствие 115-ФЗ, автоматизация проверок</td>
+                    <td class="result-cell">-80% ручной работы, 0 штрафов</td>
+                    <td><span class="tag tag-role">Комплаенс</span><span class="tag tag-role">Риски</span><span class="tag tag-role">IT</span></td>
+                    <td><span class="tag tag-industry">Финансы</span><span class="tag tag-industry">Страхование</span></td>
+                    <td><span class="tag tag-size">Enterprise</span></td>
+                    <td>Требования ЦБ, проверка, штрафы</td>
+                    <td>Скоринг, проверки, алерты, отчёты ЦБ</td>
+                    <td>Java, Kafka, ML-модели</td>
+                    <td>АБС, КИС, СМЭВ, списки</td>
+                    <td>ML-скоринг транзакций, аномалии</td>
+                    <td>-60% ложных срабатываний</td>
+                    <td><span class="status status-production">В продакшене</span></td>
+                    <td class="case-cell"><span class="case-client">Банк ТОП-20</span></td>
+                    <td>Финансы</td>
+                    <td class="case-result">1 млн проверок/день</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td class="case-cell"><span class="case-client">Страховая компания</span></td>
+                    <td>Страхование</td>
+                    <td class="case-result">Прошли проверку ЦБ</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td>Понимание регуляторики</td>
+                    <td>SAS, FICO</td>
+                    <td>Российская разработка, поддержка</td>
+                    <td>Проект под ключ</td>
+                    <td class="price-cell">от 10 млн ₽</td>
+                    <td class="price-cell">25–50 млн ₽</td>
+                    <td>6–12 мес.</td>
+                    <td>Объём транзакций, ML, интеграции</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><span class="status status-no">Нет</span></td>
+                    <td><span class="status status-ready">Актуальная</span></td>
+                    <td>Белов Д.С.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>Орлова Н.В.</td>
+                    <td>Схемы, скриншоты</td>
+                </tr>
+
+                <!-- Решение 9: Teamly -->
+                <tr>
+                    <td class="id-cell">SOL-009</td>
+                    <td class="name-cell">Teamly — управление знаниями</td>
+                    <td>Порталы и интранет</td>
+                    <td><span class="tag tag-category">Управление знаниями</span></td>
+                    <td>Иванов А.С.</td>
+                    <td>07.03.2024</td>
+                    <td class="expand-cell">Платформа для создания, структурирования и распространения корпоративных знаний</td>
+                    <td class="expand-cell">Знания в головах, нет базы, долгий онбординг</td>
+                    <td class="result-cell">Сохранение и передача экспертизы</td>
+                    <td class="result-cell">-50% время онбординга, +30% retention знаний</td>
+                    <td><span class="tag tag-role">HR</span><span class="tag tag-role">L&D</span><span class="tag tag-role">CKO</span></td>
+                    <td><span class="tag tag-industry">IT</span><span class="tag tag-industry">Консалтинг</span><span class="tag tag-industry">Производство</span></td>
+                    <td><span class="tag tag-size">Mid-market</span><span class="tag tag-size">Enterprise</span></td>
+                    <td>Текучка, рост, уход экспертов</td>
+                    <td>База знаний, курсы, тесты, геймификация</td>
+                    <td>Teamly SaaS / On-premise</td>
+                    <td>Корп. портал, AD, LMS</td>
+                    <td>Рекомендации контента, поиск по смыслу</td>
+                    <td>+40% вовлечённость</td>
+                    <td><span class="status status-pilot">Пилот</span></td>
+                    <td class="case-cell"><span class="case-client">IT-компания 500+</span></td>
+                    <td>IT</td>
+                    <td class="case-result">1 000 статей, -40% онбординг</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td class="case-cell"><span class="case-client">—</span></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>Партнёрство с вендором</td>
+                    <td>Confluence, Notion</td>
+                    <td>Российское решение, интеграция с порталом</td>
+                    <td>Лицензия + внедрение</td>
+                    <td class="price-cell">от 1 млн ₽</td>
+                    <td class="price-cell">3–7 млн ₽</td>
+                    <td>2–4 мес.</td>
+                    <td>Кол-во юзеров, кастом, интеграции</td>
+                    <td>Teamly</td>
+                    <td>Премиум-партнёр</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td><span class="status status-update">Нужно обновить</span></td>
+                    <td>Иванов А.С.</td>
+                    <td><span class="status status-needs-prep">Нужна подготовка</span></td>
+                    <td>—</td>
+                    <td>Видео, демо</td>
+                </tr>
+
+                <!-- Решение 10: E-commerce B2C -->
+                <tr>
+                    <td class="id-cell">SOL-010</td>
+                    <td class="name-cell">E-commerce B2C платформа</td>
+                    <td>E-commerce</td>
+                    <td><span class="tag tag-category">E-commerce</span></td>
+                    <td>Смирнова Е.В.</td>
+                    <td>14.03.2024</td>
+                    <td class="expand-cell">Полнофункциональный интернет-магазин с высокой конверсией и персонализацией</td>
+                    <td class="expand-cell">Низкая конверсия, устаревший UX, нет персонализации</td>
+                    <td class="result-cell">Рост продаж онлайн, улучшение UX</td>
+                    <td class="result-cell">+35% конверсия, +20% средний чек</td>
+                    <td><span class="tag tag-role">E-commerce директор</span><span class="tag tag-role">CMO</span><span class="tag tag-role">IT</span></td>
+                    <td><span class="tag tag-industry">Ритейл</span><span class="tag tag-industry">Fashion</span><span class="tag tag-industry">Электроника</span></td>
+                    <td><span class="tag tag-size">Mid-market</span><span class="tag tag-size">Enterprise</span></td>
+                    <td>Редизайн, рост онлайн-продаж, конкуренция</td>
+                    <td>Каталог, корзина, ЛК, оплата, доставка</td>
+                    <td>1С-Битрикс, Next.js, Elasticsearch</td>
+                    <td>1С, платёжки, доставка, CRM</td>
+                    <td>Рекомендации, поиск, персонализация</td>
+                    <td>+15% add-to-cart</td>
+                    <td><span class="status status-production">В продакшене</span></td>
+                    <td class="case-cell"><span class="case-client">ECCO</span></td>
+                    <td>Fashion</td>
+                    <td class="case-result">+40% конверсия после редизайна</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td class="case-cell"><span class="case-client">Электроника-ритейлер</span></td>
+                    <td>Электроника</td>
+                    <td class="case-result">Black Friday: 10x нагрузка</td>
+                    <td><span class="status status-no">NDA</span></td>
+                    <td>UX-экспертиза, highload-опыт</td>
+                    <td>Shopify, inSales</td>
+                    <td>Комплексный подход: UX + разработка</td>
+                    <td>Проект под ключ</td>
+                    <td class="price-cell">от 5 млн ₽</td>
+                    <td class="price-cell">15–35 млн ₽</td>
+                    <td>5–9 мес.</td>
+                    <td>Дизайн, функции, интеграции, нагрузка</td>
+                    <td>1С-Битрикс</td>
+                    <td>Золотой партнёр</td>
+                    <td><span class="status status-yes">Да</span></td>
+                    <td><span class="status status-ready">Актуальная</span></td>
+                    <td>Смирнова Е.В.</td>
+                    <td><span class="status status-ready">Готов</span></td>
+                    <td>Козлов Д.А.</td>
+                    <td>Демо-стенд, видео</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="legend">
+        <div class="legend-title">Легенда статусов</div>
+        <div class="legend-items">
+            <div class="legend-item">
+                <span class="status status-production">В продакшене</span>
+                <span>— есть живые кейсы</span>
+            </div>
+            <div class="legend-item">
+                <span class="status status-pilot">Пилот</span>
+                <span>— тестируем с клиентами</span>
+            </div>
+            <div class="legend-item">
+                <span class="status status-development">В разработке</span>
+                <span>— создаём</span>
+            </div>
+            <div class="legend-item">
+                <span class="status status-concept">Концепция</span>
+                <span>— можем предложить</span>
+            </div>
+            <div class="legend-item">
+                <span class="status status-ready">Готов</span>
+                <span>— спикер готов выступать</span>
+            </div>
+            <div class="legend-item">
+                <span class="status status-needs-prep">Нужна подготовка</span>
+                <span>— требуется репетиция</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Переключение представлений
+        const viewTabs = document.querySelectorAll('.view-tab');
+        const table = document.getElementById('solutionsTable');
+        const allHeaders = table.querySelectorAll('thead tr:last-child th');
+        const allCells = table.querySelectorAll('tbody td');
+
+        viewTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                viewTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Здесь можно добавить логику скрытия/показа столбцов
+                // для разных представлений
+            });
+        });
+
+        // Простой поиск
+        const searchInput = document.getElementById('search');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const rows = table.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+
+</body>
+</html>
